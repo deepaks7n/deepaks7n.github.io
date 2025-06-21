@@ -47,8 +47,7 @@ import { SITE_TITLE } from '../consts';
 	header {
 		margin: 0;
 		padding: 0 1em;
-		background: linear-gradient(var(--gray-gradient)) no-repeat;
-		background-size: 100% 100%;
+		background: white;
 		box-shadow: 0 2px 8px rgba(var(--black), 5%);
 		transition: background 0.3s ease;
 	}
@@ -85,6 +84,9 @@ import { SITE_TITLE } from '../consts';
 		display: flex;
 		align-items: center;
 		padding: 0.5rem;
+	}
+	:global(.dark) header {
+		background: #1a1a1a;
 	}
 	@media (max-width: 720px) {
 		.social-links {
