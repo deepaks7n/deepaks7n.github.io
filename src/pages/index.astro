@@ -1,0 +1,146 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => {
+		const dateA = new Date(a.data.pubDate);
+		const dateB = new Date(b.data.pubDate);
+		return dateB.valueOf() - dateA.valueOf();
+	}
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 960px;
+			}
+			.intro {
+				text-align: center;
+				margin-bottom: 3rem;
+			}
+			.intro h1 {
+				font-size: 2.5rem;
+				margin-bottom: 1rem;
+			}
+			.intro p {
+				font-size: 1.2rem;
+				color: rgb(var(--gray));
+				margin-bottom: 2rem;
+			}
+			ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 2rem;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+			ul li {
+				width: calc(50% - 1rem);
+			}
+			ul li * {
+				text-decoration: none;
+				transition: 0.2s ease;
+			}
+			ul li:first-child {
+				width: 100%;
+				margin-bottom: 1rem;
+				text-align: center;
+			}
+			ul li:first-child .title {
+				font-size: 2.369rem;
+			}
+			ul li a {
+				display: block;
+				padding: 1.5rem;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 12px;
+				background: white;
+			}
+			.title {
+				margin: 0 0 0.5rem 0;
+				color: rgb(var(--black));
+				line-height: 1.2;
+				font-size: 1.25rem;
+			}
+			.date {
+				margin: 0 0 0.5rem 0;
+				color: rgb(var(--gray));
+				font-size: 0.9rem;
+			}
+			.description {
+				margin: 0;
+				color: rgb(var(--gray-dark));
+				font-size: 0.95rem;
+			}
+			ul li a:hover {
+				box-shadow: var(--box-shadow);
+				transform: translateY(-2px);
+			}
+			ul li a:hover .title {
+				color: rgb(var(--accent));
+			}
+			@media (max-width: 720px) {
+				.intro h1 {
+					font-size: 2rem;
+				}
+				.intro p {
+					font-size: 1.1rem;
+				}
+				ul {
+					gap: 1rem;
+				}
+				ul li {
+					width: 100%;
+				}
+				ul li:first-child {
+					margin-bottom: 0;
+				}
+				ul li:first-child .title {
+					font-size: 1.563rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="intro">
+				<h1>Welcome to Deepak's Blog</h1>
+				<p>
+					Exploring software architecture, AI adventures, and engineering insights. 
+					<a href="/about">Learn more about me</a> or dive into my latest posts below.
+				</p>
+			</section>
+			
+			<section>
+				<h2>Latest Posts</h2>
+				<ul>
+					{
+						posts.map((post) => (
+							<li>
+								<a href={`/blog/${post.id}/`}>
+									<h3 class="title">{post.data.title}</h3>
+									<p class="date">
+										<FormattedDate date={post.data.pubDate} />
+									</p>
+									<p class="description">{post.data.description}</p>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
